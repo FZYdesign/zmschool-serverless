@@ -53,6 +53,12 @@ router.get("/api/wx_openid", async (ctx) => {
 /**
  * 接收微信消息推送接口
  */
+ router.get("/api/msgcall",async(ctx)=>{
+  ctx.body='hello,saron';
+});
+/**
+ * 接收微信消息推送接口
+ */
  router.post("/api/msgcall",async(ctx)=>{
   const { request } = ctx;
   const { action } = request.body;
