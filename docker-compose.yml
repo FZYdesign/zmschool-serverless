@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.development
+    volumes:
+      - .:/app
+      
+    ports:
+      - 27081:80
+    container_name: wxcloud_school
+    labels:
+      - wxPort=27082
+      - hostPort=27081
+      - wxcloud=school
+      - role=container
+    environment:
+      # 使用本地调试 MySQL 时，需要填入如下环境变量，并启动 MySQL 代理服务
+      - MYSQL_USERNAME=
+      - MYSQL_PASSWORD=
+      - MYSQL_ADDRESS=
+networks:
+  default:
+    external:
+      name: wxcb0

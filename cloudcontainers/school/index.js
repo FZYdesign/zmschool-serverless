@@ -50,6 +50,19 @@ router.get("/api/wx_openid", async (ctx) => {
   }
 });
 
+/**
+ * 接收微信消息推送接口
+ */
+router.post("/api/msgcall",async(ctx)=>{
+  const { request } = ctx;
+  const { action } = request.body;
+  if (ctx.request.headers["x-wx-source"]) {
+    ctx.body=action;
+    // ctx.body = req.headers["x-wx-openid"];
+  }
+});
+
+
 const app = new Koa();
 app
   .use(logger())
