@@ -99,18 +99,18 @@ router.get("/api/wx_openid", async (ctx) => {
       resolve(JSON.parse(response.body))
     })
   })
-}
-;
+};
+// subscribeMessage();
 /**
  * 接收微信消息推送接口
  */
  router.post("/api/msgcall",async(ctx)=>{
-  //  const { request } = ctx;
-  //  const { action } = request.body;
-   const result=await subscribeMessage();
-   ctx.body=result;
+   const { request } = ctx;
+   const { action } = request.body;
+  //  const result=await subscribeMessage();
+  //  ctx.body=result;
   // if (ctx.request.headers["x-wx-source"]) {
-  //   ctx.body=action;
+    ctx.body=action;
   //   // ctx.body = req.headers["x-wx-openid"];
   // }
 });
