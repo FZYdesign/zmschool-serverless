@@ -11,7 +11,7 @@ const router = new Router();
 const homePage = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
 
 
-const request = require('request')
+// const request = require('request');
 
 // 首页
 router.get("/", async (ctx) => {
