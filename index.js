@@ -13,11 +13,11 @@ const homePage = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
 
 const request = require('request');
 
-const cloud = require('wx-server-sdk');
-cloud.init({
-  // env: cloud.DYNAMIC_CURRENT_ENV,
-  env:'saron-hxoix'
-})
+// const cloud = require('wx-server-sdk');
+// cloud.init({
+//   // env: cloud.DYNAMIC_CURRENT_ENV,
+//   env:'saron-hxoix'
+// })
 
 // 首页
 router.get("/", async (ctx) => {
@@ -69,78 +69,78 @@ router.get("/api/wx_openid", async (ctx) => {
 
 
  let subscribeMessage= async(msgData)=>{
-  // return new Promise((resolve, reject) => {
-    // request({
-    //   method: 'POST',
-    //   // url: 'http://api.weixin.qq.com/wxa/msg_sec_check?access_token=TOKEN',
-    //   // url: 'http://api.weixin.qq.com/wxa/msg_sec_check', // 这里就是少了一个token
-    //   url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send',
+  return new Promise((resolve, reject) => {
+    request({
+      method: 'POST',
+      // url: 'http://api.weixin.qq.com/wxa/msg_sec_check?access_token=TOKEN',
+      // url: 'http://api.weixin.qq.com/wxa/msg_sec_check', // 这里就是少了一个token
+      url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send',
       
-    //   // url:'http://api.weixin.qq.com/cgi-bin/message/custom/send',
-    //   // body: JSON.stringify({
-    //   //   touser: "olCm55e965oZA_5256GAmSp5TWts",
-    //   //   msgtype: "text",
-    //   //   text: {
-    //   //     content: "Hello World"
-    //   //   }
-    //   // })
+      // url:'http://api.weixin.qq.com/cgi-bin/message/custom/send',
+      // body: JSON.stringify({
+      //   touser: "olCm55e965oZA_5256GAmSp5TWts",
+      //   msgtype: "text",
+      //   text: {
+      //     content: "Hello World"
+      //   }
+      // })
 
-    //   body: JSON.stringify({
-    //     touser: 'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
-    //     page: 'index',
-    //     lang: 'zh_CN',
-    //     data: {
-    //       "thing1": {
-    //         "value": msgData.thing1||"张三学生卡位置发生变化"
-    //       },
-    //       // "thing4": {
-    //       //   "value": msgData.thing4||'深圳第一中学'
-    //       // },
-    //       // "date3": {
-    //       //   "value": msgData.date3||'2019-11-05 00:00:00'
-    //       // },
-    //       "time3":{
-    //         "value":"2019-11-05 00:00:00"
-    //       }
-    //     },
-    //     templateId: 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
-    //     miniprogramState: 'developer'
-    //     // openid: 'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
-    //     // version: 2,
-    //     // scene: 2,
-    //     // content: '安全检测文本'
-    //   })
-    // },function (error, response) {
-    //   if(response){
-    //     console.log('接口返回内容', response.body)
-    //     resolve(JSON.parse(response.body));
-    //   }
-    //   if(error){
-    //     reject(error)
-    //   }
-   
-    // })
-  // })
-  try {
-    const result = await cloud.openapi.subscribeMessage.send({
-        "touser": 'olCm55e965oZA_5256GAmSp5TWts',
-        "page": 'index',
-        "lang": 'zh_CN',
-        "data": {
-        "thing1": {
-          "value": msgData.thing1||"张三学生卡位置发生变化"
+      body: JSON.stringify({
+        touser: 'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
+        page: 'index',
+        lang: 'zh_CN',
+        data: {
+          "thing1": {
+            "value": msgData.thing1||"张三学生卡位置发生变化"
+          },
+          // "thing4": {
+          //   "value": msgData.thing4||'深圳第一中学'
+          // },
+          // "date3": {
+          //   "value": msgData.date3||'2019-11-05 00:00:00'
+          // },
+          "time3":{
+            "value":"2019-11-05 00:00:00"
+          }
         },
-        "time3":{
-          "value":"2019-11-05 00:00:00"
-        }
-        },
-        "templateId": 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
-        "miniprogramState": 'developer'
+        templateId: 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
+        miniprogramState: 'developer'
+        // openid: 'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
+        // version: 2,
+        // scene: 2,
+        // content: '安全检测文本'
       })
-    return result
-  } catch (err) {
-    return err
-  }
+    },function (error, response) {
+      if(response){
+        console.log('接口返回内容', response.body)
+        resolve(JSON.parse(response.body));
+      }
+      if(error){
+        reject(error)
+      }
+   
+    })
+  })
+  // try {
+  //   const result = await cloud.openapi.subscribeMessage.send({
+  //       "touser": 'olCm55e965oZA_5256GAmSp5TWts',
+  //       "page": 'index',
+  //       "lang": 'zh_CN',
+  //       "data": {
+  //       "thing1": {
+  //         "value": msgData.thing1||"张三学生卡位置发生变化"
+  //       },
+  //       "time3":{
+  //         "value":"2019-11-05 00:00:00"
+  //       }
+  //       },
+  //       "templateId": 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
+  //       "miniprogramState": 'developer'
+  //     })
+  //   return result
+  // } catch (err) {
+  //   return err
+  // }
 };
 // subscribeMessage();
 /**
