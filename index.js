@@ -147,11 +147,14 @@ router.get("/api/wx_openid", async (ctx) => {
  * 接收微信消息推送接口
  */
  router.post("/api/msgcall",async(ctx)=>{
+  // const headers = ctx.headers;
+  // const token = headers['x-wx-cloudbase-access-token'];
    const { request } = ctx;
    const { action } = request.body;
    try {
-    const result=await subscribeMessage();
-    ctx.body=result;
+    // const result=await subscribeMessage();
+    // ctx.body=result;
+    ctx.body=ctx;
    } catch (error) {
     ctx.body=error;
    }
