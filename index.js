@@ -117,7 +117,7 @@ router.get("/api/wx_openid", async (ctx) => {
             "value":"2019-11-05 00:00:00"
           }
         },
-        template_id: "Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk",
+        template_id: "Q3egK0TR8xnjPFokCjjQbs5nKqWaFB_DrINOPmjNd08",
         miniprogram_state:"developer",//跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
         // openid: 'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
         // version: 2,
