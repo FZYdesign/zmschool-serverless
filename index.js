@@ -107,15 +107,15 @@ router.get("/api/wx_openid", async (ctx) => {
  router.post("/api/msgcall",async(ctx)=>{
    const { request } = ctx;
    const { action } = request.body;
-   try {
-    const result=await subscribeMessage();
-    ctx.body=result;
-   } catch (error) {
-    ctx.body=error;
-   }
+  //  try {
+  //   const result=await subscribeMessage();
+  //   ctx.body=result;
+  //  } catch (error) {
+  //   ctx.body=error;
+  //  }
 
   // if (ctx.request.headers["x-wx-source"]) {
-    // ctx.body=action;
+    ctx.body=action;
   //   // ctx.body = req.headers["x-wx-openid"];
   // }
 });
