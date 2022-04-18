@@ -5,6 +5,12 @@
       "domain": "",
       "ip": "",
       "mode": "compose"
+    },
+    {
+      "name": "zmschool-serverless",
+      "domain": "",
+      "ip": "",
+      "mode": "compose"
     }
   ],
   "config": {
