@@ -157,8 +157,8 @@ router.get("/api/wx_openid", async (ctx) => {
    }
    const { action } = request.body;
    try {
-    const result=await subscribeMessage(wxinfo);
-    ctx.body=result;
+    // const result=await subscribeMessage(wxinfo);
+    ctx.body=wxinfo;
     // ctx.body=ctx;
    } catch (error) {
     ctx.body=error;
