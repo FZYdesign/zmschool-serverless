@@ -1,9 +1,5 @@
 FROM alpine:3.13
 
-#saron 添加两行
-RUN sed -i ‘s/https/http/’ /etc/apk/repositories
-RUN apk add curl
-
 # 安装依赖包，如需其他依赖包，请到alpine依赖包管理(https://pkgs.alpinelinux.org/packages?name=php8*imagick*&branch=v3.13)查找。
 RUN apk add --update --no-cache nodejs npm
 
