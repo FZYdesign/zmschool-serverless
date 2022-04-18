@@ -63,7 +63,15 @@ router.get("/api/wx_openid", async (ctx) => {
  * 接收微信消息推送接口
  */
  router.get("/api/msgcall",async(ctx)=>{
-  ctx.body='hello,saron';
+  const { request } = ctx;
+  const {header} = request;
+  const token = header['x-wx-cloudbase-access-token'];
+  const openid=header['x-wx-openid'];
+  const wxinfo={
+   token:token,
+   openid:openid
+  }
+  ctx.body=wxinfo;
 });
 
 
@@ -148,7 +156,7 @@ router.get("/api/wx_openid", async (ctx) => {
  */
  router.post("/api/msgcall",async(ctx)=>{
    const { request } = ctx;
-   const {header} = request.header;
+   const {header} = request;
    const token = header['x-wx-cloudbase-access-token'];
    const openid=header['x-wx-openid'];
    const wxinfo={
@@ -157,8 +165,8 @@ router.get("/api/wx_openid", async (ctx) => {
    }
    const { action } = request.body;
    try {
-    // const result=await subscribeMessage(wxinfo);
-    ctx.body=wxinfo;
+    const result=await subscribeMessage(wxinfo);
+    // ctx.body=wxinfo;
     // ctx.body=ctx;
    } catch (error) {
     ctx.body=error;
