@@ -15,7 +15,8 @@ const request = require('request');
 
 const cloud = require('wx-server-sdk');
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV,
+  // env: cloud.DYNAMIC_CURRENT_ENV,
+  env:'saron-hxoix'
 })
 
 // 首页
