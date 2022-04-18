@@ -68,7 +68,7 @@ router.get("/api/wx_openid", async (ctx) => {
 
 
  let subscribeMessage= async(msgData)=>{
-  return new Promise((resolve, reject) => {
+  // return new Promise((resolve, reject) => {
     // request({
     //   method: 'POST',
     //   // url: 'http://api.weixin.qq.com/wxa/msg_sec_check?access_token=TOKEN',
@@ -119,29 +119,27 @@ router.get("/api/wx_openid", async (ctx) => {
     //   }
    
     // })
-
-    try {
-      const result = await cloud.openapi.subscribeMessage.send({
-          "touser": 'olCm55e965oZA_5256GAmSp5TWts',
-          "page": 'index',
-          "lang": 'zh_CN',
-          "data": {
-          "thing1": {
-            "value": msgData.thing1||"张三学生卡位置发生变化"
-          },
-          "time3":{
-            "value":"2019-11-05 00:00:00"
-          }
-          },
-          "templateId": 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
-          "miniprogramState": 'developer'
-        })
-      return result
-    } catch (err) {
-      return err
-    }
-
-  })
+  // })
+  try {
+    const result = await cloud.openapi.subscribeMessage.send({
+        "touser": 'olCm55e965oZA_5256GAmSp5TWts',
+        "page": 'index',
+        "lang": 'zh_CN',
+        "data": {
+        "thing1": {
+          "value": msgData.thing1||"张三学生卡位置发生变化"
+        },
+        "time3":{
+          "value":"2019-11-05 00:00:00"
+        }
+        },
+        "templateId": 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
+        "miniprogramState": 'developer'
+      })
+    return result
+  } catch (err) {
+    return err
+  }
 };
 // subscribeMessage();
 /**
