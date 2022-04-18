@@ -68,32 +68,40 @@ router.get("/api/wx_openid", async (ctx) => {
       method: 'POST',
       // url: 'http://api.weixin.qq.com/wxa/msg_sec_check?access_token=TOKEN',
       // url: 'http://api.weixin.qq.com/wxa/msg_sec_check', // 这里就是少了一个token
-      url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send',
+      // url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send',
+      url:'http://api.weixin.qq.com/cgi-bin/message/custom/send',
       body: JSON.stringify({
-        touser: 'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
-        page: 'index',
-        lang: 'zh_CN',
-        data: {
-          "thing1": {
-            "value": msgData.thing1||"张三学生卡位置发生变化"
-          },
-          // "thing4": {
-          //   "value": msgData.thing4||'深圳第一中学'
-          // },
-          // "date3": {
-          //   "value": msgData.date3||'2019-11-05 00:00:00'
-          // },
-          "time3":{
-            "value":"2019-11-05 00:00:00"
-          }
-        },
-        templateId: 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
-        miniprogramState: 'developer'
-        // openid: 'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
-        // version: 2,
-        // scene: 2,
-        // content: '安全检测文本'
+        touser: "olCm55e965oZA_5256GAmSp5TWts",
+        msgtype: "text",
+        text: {
+          content: "Hello World"
+        }
       })
+      // body: JSON.stringify({
+      //   touser: 'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
+      //   page: 'index',
+      //   lang: 'zh_CN',
+      //   data: {
+      //     "thing1": {
+      //       "value": msgData.thing1||"张三学生卡位置发生变化"
+      //     },
+      //     // "thing4": {
+      //     //   "value": msgData.thing4||'深圳第一中学'
+      //     // },
+      //     // "date3": {
+      //     //   "value": msgData.date3||'2019-11-05 00:00:00'
+      //     // },
+      //     "time3":{
+      //       "value":"2019-11-05 00:00:00"
+      //     }
+      //   },
+      //   templateId: 'Q3egK0TR8xnjPFokCjjQbkL65wLLFGuRtWSzgUPBrkk',
+      //   miniprogramState: 'developer'
+      //   // openid: 'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
+      //   // version: 2,
+      //   // scene: 2,
+      //   // content: '安全检测文本'
+      // })
     },function (error, response) {
       if(response){
         console.log('接口返回内容', response.body)
