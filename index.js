@@ -67,7 +67,7 @@ router.get("/api/wx_openid", async (ctx) => {
     request({
       method: 'POST',
       // url: 'http://api.weixin.qq.com/wxa/msg_sec_check?access_token=TOKEN',
-      url: 'https://api.weixin.qq.com/wxa/msg_sec_check', // 这里就是少了一个token
+      url: 'http://api.weixin.qq.com/wxa/msg_sec_check', // 这里就是少了一个token
       // url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send',
       body: JSON.stringify({
         // touser: 'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
