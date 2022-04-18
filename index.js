@@ -71,7 +71,13 @@ router.get("/api/wx_openid", async (ctx) => {
    token:token,
    openid:openid
   }
-  ctx.body=wxinfo;
+  try {
+    const result=await subscribeMessage(wxinfo,{thing1:'张三学生卡位置发生变化'});
+    // ctx.body=wxinfo;
+    ctx.body=result;
+   } catch (error) {
+    ctx.body=error;
+   }
 });
 
 
@@ -82,7 +88,7 @@ router.get("/api/wx_openid", async (ctx) => {
       method: 'POST',
       // url: 'http://api.weixin.qq.com/wxa/msg_sec_check?access_token=TOKEN',
       // url: 'http://api.weixin.qq.com/wxa/msg_sec_check', // 这里就是少了一个token
-      url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send?cloudbase_access_token='+wxinfo.token,
+      url:'https://api.weixin.qq.com/cgi-bin/message/subscribe/send?cloudbase_access_token='+wxinfo.token,
       
       // url:'http://api.weixin.qq.com/cgi-bin/message/custom/send',
       // body: JSON.stringify({
@@ -165,9 +171,9 @@ router.get("/api/wx_openid", async (ctx) => {
    }
    const { action } = request.body;
    try {
-    const result=await subscribeMessage(wxinfo);
+    const result=await subscribeMessage(wxinfo,{thing1:'张三学生卡位置发生变化'});
     // ctx.body=wxinfo;
-    // ctx.body=ctx;
+    ctx.body=result;
    } catch (error) {
     ctx.body=error;
    }
