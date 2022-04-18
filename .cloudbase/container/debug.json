@@ -9,8 +9,7 @@
     {
       "name": "zmschool-serverless",
       "domain": "",
-      "ip": "",
-      "containerId": "d52efcec529b9cdeaca365fcc303ea6a0b10f59292daf3f373673252275f8026"
+      "ip": ""
     }
   ],
   "config": {
@@ -24,9 +23,7 @@
       "mem": 1,
       "policyType": "cpu",
       "policyThreshold": 60,
-      "envParams": {
-
-      },
+      "envParams": {},
       "customLogs": "stdout",
       "containerPort": 80,
       "initialDelaySeconds": 2
