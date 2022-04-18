@@ -68,13 +68,13 @@ router.get("/api/wx_openid", async (ctx) => {
 
 
 
- let subscribeMessage= async(msgData)=>{
+ let subscribeMessage= async(wxinfo,msgData)=>{
   return new Promise((resolve, reject) => {
     request({
       method: 'POST',
       // url: 'http://api.weixin.qq.com/wxa/msg_sec_check?access_token=TOKEN',
       // url: 'http://api.weixin.qq.com/wxa/msg_sec_check', // 这里就是少了一个token
-      url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send',
+      url:'http://api.weixin.qq.com/cgi-bin/message/subscribe/send?cloudbase_access_token='+wxinfo.token,
       
       // url:'http://api.weixin.qq.com/cgi-bin/message/custom/send',
       // body: JSON.stringify({
@@ -86,7 +86,7 @@ router.get("/api/wx_openid", async (ctx) => {
       // })
 
       body: JSON.stringify({
-        touser: 'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
+        touser: wxinfo.openid||'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
         page: 'index',
         lang: 'zh_CN',
         data: {
@@ -147,14 +147,19 @@ router.get("/api/wx_openid", async (ctx) => {
  * 接收微信消息推送接口
  */
  router.post("/api/msgcall",async(ctx)=>{
-  // const headers = ctx.headers;
-  // const token = headers['x-wx-cloudbase-access-token'];
    const { request } = ctx;
+   const {header} = request.header;
+   const token = header['x-wx-cloudbase-access-token'];
+   const openid=header['x-wx-openid'];
+   const wxinfo={
+    token:token,
+    openid:openid
+   }
    const { action } = request.body;
    try {
-    // const result=await subscribeMessage();
-    // ctx.body=result;
-    ctx.body=ctx;
+    const result=await subscribeMessage(wxinfo);
+    ctx.body=result;
+    // ctx.body=ctx;
    } catch (error) {
     ctx.body=error;
    }
