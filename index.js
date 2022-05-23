@@ -36,7 +36,9 @@ router.post("/api/creatcode", async (ctx) => {
     //     "checkPath": true,
     //     "envVersion": 'release'
     //   })
+    const token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
     let data={
+      cloudbase_access_token:token,
       page: 'pages/v2/index/index',
       scene: 'roleType='+roleType+'&schoolId='+schoolId,
       checkPath: true,
@@ -66,6 +68,7 @@ let creatcode= async(wxinfo,msgData)=>{
       url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token='+token,
       // url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+wxinfo.token,
       body: JSON.stringify(msgData||{
+        cloudbase_access_token:token,
         page: 'pages/v2/index/index',
         scene: 'roleType='+roleType+'&schoolId='+schoolId,
         checkPath: true,
