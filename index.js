@@ -73,7 +73,8 @@ let creatcode= async(wxinfo,msgData)=>{
         cloudbase_access_token:token,
         page: 'pages/v2/index/index',
         // scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
-        scene: urlencode('roleType='+roleType+'&schoolId='+schoolId),
+        // scene: urlencode('roleType='+roleType+'&schoolId='+schoolId),
+        scene: '12',
         // scene: 'roleType='+roleType+'&schoolId='+schoolId,
         checkPath: true,
         envVersion: 'release'
