@@ -44,7 +44,7 @@ router.post("/api/creatcode", async (ctx) => {
       scene: 'roleType='+roleType+'&schoolId='+schoolId,
       // scene: "a=12",
       check_path: true,
-      envVersion: "release"
+      env_version: "release"
       }
     result=await creatcode(wxinfo,data);
   } catch (err) {
@@ -77,7 +77,7 @@ let creatcode= async(wxinfo,msgData)=>{
         // scene: "a=12",
         scene: 'roleType='+roleType+'&schoolId='+schoolId,
         check_path: true,
-        envVersion: "release"
+        env_version: "release"
         })
     },function (error, response) {
       if(response){
