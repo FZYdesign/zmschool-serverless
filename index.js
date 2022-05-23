@@ -36,7 +36,7 @@ router.post("/api/creatcode", async (ctx) => {
     //     "checkPath": true,
     //     "envVersion": 'release'
     //   })
-    const token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');//获取容器推送的token
+    // const token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');//获取容器推送的token
     let data={
       // cloudbase_access_token:token,
       page: 'pages/v2/index/index',
