@@ -87,6 +87,12 @@
             onclick="set('clear')"
             >清零</a
           >
+          <a
+          class="btn btn-success btn-lg count-button"
+          style="background: #07c160; border: 0"
+          onclick="creatcode()"
+          >生成小程序码</a
+        >
         </div>
         <small
           class="text-black-50"
@@ -97,6 +103,12 @@
           class="qrcode middle"
           src="https://qcloudimg.tencent-cloud.cn/raw/89b46988d3cd73d8a56e76a1b82bb377.png"
         />
+
+        <img
+        id="minpro_code"
+        class="qrcode middle"
+        src=""
+      />
       </div>
     </div>
   </body>
@@ -128,6 +140,26 @@
       }).done(function (res) {
         if (res && res.data !== undefined) {
           $(".count-number").html(res.data);
+        }
+      });
+
+
+ 
+
+    }
+
+    function creatcode(){
+      $.ajax("/api/creatcode", {
+        method: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify({
+          roleType: 0,
+          schoolId:1
+        }),
+      }).done(function (res) {
+        if (res && res.data !== undefined) {
+          $("#minpro_code").src(res.data);
         }
       });
     }

@@ -16,8 +16,76 @@ const request = require('request');
 // const cloud = require('wx-server-sdk');
 // cloud.init({
 //   // env: cloud.DYNAMIC_CURRENT_ENV,
-//   env:'saron-hxoix'
+//   env:'prod-9gyduzozb3779da5'
 // })
+router.post("/api/creatcode", async (ctx) => {
+  const { request } = ctx;
+  const {header} = request;
+  const token = header['x-wx-cloudbase-access-token'];
+  const openid=header['x-wx-openid'];
+  let wxinfo={
+   token:token,
+   openid:openid
+  }
+  const { roleType,schoolId } = request.body;
+  let result={roleType:roleType,schoolId:schoolId};
+  try {
+    //  result = await cloud.openapi.wxacode.getUnlimited({
+    //     "page": 'pages/v2/index/index',
+    //     "scene": 'roleType='+roleType+'&schoolId='+schoolId,
+    //     "checkPath": true,
+    //     "envVersion": 'release'
+    //   })
+    let data={
+      page: 'pages/v2/index/index',
+      scene: 'roleType='+roleType+'&schoolId='+schoolId,
+      checkPath: true,
+      envVersion: 'release'
+      }
+    result=await creatcode(wxinfo,data);
+  } catch (err) {
+      result=err;
+  }
+  ctx.body = {
+    code: 0,
+    data: result,
+  };
+})
+
+/**
+ * 生成小程序二维码
+ * @param {*} wxinfo 
+ * @param {*} msgData 
+ * @returns 
+ */
+let creatcode= async(wxinfo,msgData)=>{
+  return new Promise((resolve, reject) => {
+    const token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
+    request({
+      method: 'POST',
+      url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token='+token,
+      // url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+wxinfo.token,
+      body: JSON.stringify(msgData||{
+        page: 'pages/v2/index/index',
+        scene: 'roleType='+roleType+'&schoolId='+schoolId,
+        checkPath: true,
+        envVersion: 'release'
+        })
+    },function (error, response) {
+      if(response){
+        console.log('接口返回内容', response.body)
+        resolve(JSON.parse(response.body));
+      }
+      if(error){
+        reject(error)
+      }
+   
+    })
+  })
+};
+
+
+
 
 // 首页
 router.get("/", async (ctx) => {
