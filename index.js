@@ -39,12 +39,12 @@ router.post("/api/creatcode", async (ctx) => {
     // const token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');//获取容器推送的token
     let data={
       // cloudbase_access_token:token,
-      page: "pages/v2/index/index",
+      "page": "pages/v2/index/index",
       // scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
       // scene: 'roleType='+roleType+'&schoolId='+schoolId,
-      scene: "a=12",
-      check_path: true,
-      env_version: "release"
+      "scene": "a=12",
+      "check_path": true,
+      "env_version": "release"
       }
     result=await creatcode(wxinfo,data);
   } catch (err) {
@@ -69,16 +69,7 @@ let creatcode= async(wxinfo,msgData)=>{
       method: 'POST',
       url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token='+token,
       // url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+wxinfo.token,
-      body: JSON.stringify(msgData||{
-        // cloudbase_access_token:token,
-        page: "pages/v2/index/index",
-        // scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
-        // scene: urlencode('roleType='+roleType+'&schoolId='+schoolId),
-        scene: "a=12",
-        // scene: 'roleType='+roleType+'&schoolId='+schoolId,
-        check_path: true,
-        env_version: "release"
-        })
+      body: JSON.stringify(msgData),
     },function (error, response) {
       if(response){
         console.log('接口返回内容', response.body)
