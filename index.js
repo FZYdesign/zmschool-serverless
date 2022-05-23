@@ -40,8 +40,8 @@ router.post("/api/creatcode", async (ctx) => {
     let data={
       // cloudbase_access_token:token,
       page: "pages/v2/index/index",
-      // scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
-      scene: 'roleType='+roleType+'&schoolId='+schoolId,
+      scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
+      // scene: 'roleType='+roleType+'&schoolId='+schoolId,
       // scene: "a=12",
       check_path: true,
       env_version: "release"
@@ -72,10 +72,10 @@ let creatcode= async(wxinfo,msgData)=>{
       body: JSON.stringify(msgData||{
         // cloudbase_access_token:token,
         page: "pages/v2/index/index",
-        // scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
+        scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
         // scene: urlencode('roleType='+roleType+'&schoolId='+schoolId),
         // scene: "a=12",
-        scene: 'roleType='+roleType+'&schoolId='+schoolId,
+        // scene: 'roleType='+roleType+'&schoolId='+schoolId,
         check_path: true,
         env_version: "release"
         })
