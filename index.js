@@ -69,7 +69,7 @@ let creatcode= async(wxinfo,msgData)=>{
       method: 'POST',
       url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token='+token,
       // url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+wxinfo.token,
-      body: JSON.stringify(msgData),
+      body: JSON.stringify(msgData)
     },function (error, response) {
       if(response){
         console.log('接口返回内容', response.body)
