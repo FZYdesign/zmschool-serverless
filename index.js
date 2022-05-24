@@ -64,10 +64,10 @@ router.post("/api/creatcode", async (ctx) => {
  */
 let creatcode= async(wxinfo,msgData)=>{
   return new Promise((resolve, reject) => {
-    const token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
+    // const token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
     request({
       method: 'POST',
-      url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token='+token,
+      url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit',
       // url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+wxinfo.token,
       body: JSON.stringify(msgData)
     },function (error, response) {
