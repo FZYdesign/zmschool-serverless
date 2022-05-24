@@ -252,6 +252,15 @@ router.get("/api/wx_openid", async (ctx) => {
 });
 
 const app = new Koa();
+app.use(async (ctx, next)=> {
+  const contentType = 'application/json; chartset=utf-8'
+  ctx.set('Content-Type', contentType)
+  ctx.set("Access-Control-Allow-Origin", "*");
+  ctx.set("Access-Control-Allow-Methods", "OPTIONS, GET, PUT, POST, DELETE");
+  // ctx.response.body = '{"success": true}'
+  await next()
+})
+
 app
   .use(logger())
   .use(bodyParser())
