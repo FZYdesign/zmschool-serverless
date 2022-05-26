@@ -9,7 +9,12 @@ const sequelize = new Sequelize("nodejs_demo", MYSQL_USERNAME, MYSQL_PASSWORD, {
   host,
   port,
   dialect: "mysql" /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
+  timezone: "+8:00",
+  // dialectOptions: {
+  //   useUTC: false
+  // },
 });
+
 
 // 定义数据模型
 const Counter = sequelize.define("Counter", {
@@ -20,13 +25,44 @@ const Counter = sequelize.define("Counter", {
   },
 });
 
+const Wxauth = sequelize.define("Wxauth", {
+  accesstoken: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: '',
+  },
+  expiresin:{
+    type:DataTypes.BIGINT,
+    allowNull: false,
+    defaultValue: 7200,
+  },
+//   createdAt: {
+//     type: DataTypes.DATE,
+//     get() {
+//         return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm:ss');
+//     }
+// },
+// updatedAt: {
+//     type: DataTypes.DATE,
+//     get() {
+//         return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm:ss');
+//     }
+// },
+// timestamp: { //我们自己定义的时间戳字段
+//   type: DataTypes.DATE,
+//   defaultValue: Date.now()
+// }
+});
+
 // 数据库初始化方法
 async function init() {
   await Counter.sync({ alter: true });
+  await Wxauth.sync({ alter: true });
 }
 
 // 导出初始化方法和模型
 module.exports = {
   init,
   Counter,
+  Wxauth,
 };

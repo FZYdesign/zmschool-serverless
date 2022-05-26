@@ -93,6 +93,11 @@
           onclick="creatcode()"
           >生成小程序码</a
         >
+        <a
+        class="btn btn-success btn-lg count-button"
+        style="background: #07c160; border: 0"
+        onclick="getToken()"
+        >获取token</a>
         </div>
         <small
           class="text-black-50"
@@ -142,11 +147,7 @@
           $(".count-number").html(res.data);
         }
       });
-
-
- 
-
-    }
+    };
 
     function creatcode(){
       $.ajax("/api/creatcode", {
@@ -162,6 +163,22 @@
           $("#minpro_code").src(res.data);
         }
       });
-    }
+    };
+    function getToken(){
+      $.ajax("/api/token", {
+        method: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        // data: JSON.stringify({
+        //   roleType: 0,
+        //   schoolId:1
+        // }),
+      }).done(function (res) {
+        if (res && res.data !== undefined) {
+          console.log(res);
+          // $("#minpro_code").src(res.data);
+        }
+      });
+    };
   </script>
 </html>
