@@ -60,18 +60,22 @@ router.post("/api/creatcode", async (ctx) => {
  */
 let creatcode = async (wxinfo, msgData,token) => {
   return new Promise((resolve, reject) => {
-    const _token = token||fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
+    const cloudbase_access_token = token||fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
+    let url=token?'http://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + token:'http://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token=' + cloudbase_access_token
     request({
       method: 'POST',
       // url:'http://api.weixin.qq.com/wxa/getwxacodeunlimit',//
-      url: 'http://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + _token,
+      url:url,
+      // url: 'http://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + _token,
       // url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+wxinfo.token,
       body: JSON.stringify(msgData),
       timeout: 10000,
     }, function (error, response) {
       if (response) {
         console.log('接口返回内容', response.body)
-        resolve(JSON.parse(response.body));
+        //返回来的二进制图片数据，需要转成base64,或者保存后，返回给前端
+        resolve(response.body);
+        // resolve(JSON.parse(response.body));
       }
       if (error) {
         reject(error)
@@ -148,7 +152,6 @@ try {
           } else {
             result = '获取不了更新数据';
           }
-  
         } else {
           result = '微信token接口无数据返回';
         }
