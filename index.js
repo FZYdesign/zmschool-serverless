@@ -42,7 +42,7 @@ router.post("/api/creatcode", async (ctx) => {
       check_path: true,
       env_version: "release"
     }
-    result = await creatcode(wxinfo, data,null);
+    result = await creatcode(wxinfo, data, null);
   } catch (err) {
     result = err;
   }
@@ -58,14 +58,14 @@ router.post("/api/creatcode", async (ctx) => {
  * @param {*} msgData 
  * @returns 
  */
-let creatcode = async (wxinfo, msgData,token) => {
+let creatcode = async (wxinfo, msgData, token) => {
   return new Promise((resolve, reject) => {
-    const cloudbase_access_token = token||fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
-    let url=token?'http://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + token:'http://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token=' + cloudbase_access_token
+    const cloudbase_access_token = fs.readFileSync('/.tencentcloudbase/wx/cloudbase_access_token', 'utf-8');
+    let url = token ? 'http://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + token : 'http://api.weixin.qq.com/wxa/getwxacodeunlimit?cloudbase_access_token=' + cloudbase_access_token
     request({
       method: 'POST',
       // url:'http://api.weixin.qq.com/wxa/getwxacodeunlimit',//
-      url:url,
+      url: url,
       // url: 'http://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + _token,
       // url:'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+wxinfo.token,
       body: JSON.stringify(msgData),
@@ -73,17 +73,32 @@ let creatcode = async (wxinfo, msgData,token) => {
     }, function (error, response) {
       if (response) {
         console.log('接口返回内容', response.body)
+        // const buffer = new Buffer(response.body, 'binary');
+        let result=response.body;
+        // let base64str = Buffer.from(response.body).toString('base64'); // base64编码
+        // let base64str = Buffer.from(response.body,'binary').toString('base64'); // base64编码
         //返回来的二进制图片数据，需要转成base64,或者保存后，返回给前端
-        resolve(response.body);
+        // let result=new Buffer(response.body).toString('base64');
+        // let buffer = Buffer.from(response.body, 'utf-8');
+        // let result=buffer.toString('base64');
+        // if(isBuffer(result)){
+          // result=toBase64("image/jpeg",result);
+        // }
+        resolve(result);
         // resolve(JSON.parse(response.body));
       }
       if (error) {
         reject(error)
       }
-
     })
   })
 };
+const isBuffer=(str)=>{
+  return str && typeof str === "object" && Buffer.isBuffer(str)
+}
+const toBase64 = (extMimeType, buffer) =>{
+  return  'data:'+extMimeType||'image/jpeg'+';base64,'+buffer.toString('base64');
+}
 
 let getWxaccessToken = async () => {
   return new Promise((resolve, reject) => {
@@ -116,15 +131,17 @@ let getWxaccessToken = async () => {
  * 先判断数据库表是否有，有并且未过期，就直接从数据库获取，准备过期，就重新请求微信接口获取，并更新到数据库
  */
 const getToken = async () => {
-  let result = {saron:'333333'};
+  let result = { saron: '333333' };
   let wxAuthInfo = [];//数据库表数据列表token实例,数组对象
-try {
-    //先从数据库里面取数据，如果数据库没有数据，或者token即将过期，就请求腾讯接口获取更新token
+  // result = await getWxaccessToken();
+  try {
+
     wxAuthInfo = await Wxauth.findAll({
       where: {
         id: 1
       }
     });
+    //先从数据库里面取数据，如果数据库没有数据，或者token即将过期，就请求腾讯接口获取更新token
     if (wxAuthInfo.length > 0 && wxAuthInfo[0].expiresin) {
       let nowTimestamp = new Date().getTime() + 600000;//当前时间+10分钟，换算成毫秒
       if (wxAuthInfo[0].expiresin > nowTimestamp) {
@@ -142,15 +159,11 @@ try {
           let timestamp = new Date().getTime() + result.expires_in * 1000;//换算成毫秒
           //  let expires_in=result.expires_in;//token有效期
           let expires_in = timestamp;//token有效期
-          wxAuthInfo = await wxAuthInfo[0].update({ accesstoken: access_token, expiresin: expires_in, updatedAt: Date.now() });//更新token，和token有效期
+          await wxAuthInfo[0].update({ accesstoken: access_token, expiresin: expires_in });//更新token，和token有效期
           // console.log(wxAuthInfo.toJSON()); 
-          if (wxAuthInfo.length > 0) {
-            result = {
-              expiresin: wxAuthInfo[0].expiresin,
-              accesstoken: wxAuthInfo[0].accesstoken
-            }
-          } else {
-            result = '获取不了更新数据';
+          result = {
+            expiresin: expires_in,
+            accesstoken: access_token
           }
         } else {
           result = '微信token接口无数据返回';
@@ -164,16 +177,24 @@ try {
         let timestamp = new Date().getTime() + result.expires_in * 1000;//换算成毫秒
         //  let expires_in=result.expires_in;//token有效期
         let expires_in = timestamp;//token有效期
-        wxAuthInfo = await Wxauth.create({ accesstoken: access_token, expiresin: expires_in });
+        wxAuthInfo = await Wxauth.create({ accesstoken: access_token, expiresin: expires_in });//创建返回来的是一个对象
         // console.log(wxAuthInfo.toJSON()); 
+        if (wxAuthInfo.accesstoken) {
+          result = {
+            expiresin: wxAuthInfo.expiresin,
+            accesstoken: wxAuthInfo.accesstoken
+          }
+        } else {
+          result = '获取不了创建token记录的数据';
+        }
       } else {
         result = '微信token接口无数据返回';
       }
     }
-} catch (error) {
-  result=error
-}
-  return result;
+  } catch (error) {
+    result = error
+  }
+  return result
 };
 
 // 首页
@@ -191,30 +212,33 @@ router.get("/api/token", async (ctx) => {
   let result = {};
   let wxAuthInfo = [];//数据库表数据列表token实例,数组对象
   try {
-    result=await getToken();
-     if(result.accesstoken){
-
-      let data={
+    result = await getToken();
+    if (result.accesstoken||result.access_token) {
+      let data = {
         // access_token:result.accesstoken,
         page: "pages/v2/index/index",
         // scene: 'roletype='+roleType+'&schoolid='+schoolId,//最大32个可见字符，只支持数字，大小写英文以及部分特殊字符：!#$&'()*+,/:;=?@-._~，其它字符请自行编码为合法字符（因不支持%，中文无法使用 urlencode 处理，请使用其他编码方式）
         // scene: 'roleType='+roleType+'&schoolId='+schoolId,
-        scene:'roleType=0&schoolId=7',
+        scene: 'roleType=0&schoolId=7',
         check_path: true,
         env_version: "release"
-        }
-      result=await creatcode(null,data,result.accesstoken);
-     }else{
-      result=result;
-     }
+      }
+
+      result = await creatcode(null, data, result.accesstoken||result.access_token);
+      // let mytoken='57_5Pa_DHJEmdk3ne_sety_wuvfCYTTSg3rPP85r569p8Tmf3CMrTbdUgLQL6xOxPW-3U2K-vZBe0UIJbWyqFmE_yWRSc69wTAMr-S2kbayxBlTJhG46xBd-6l3NoTMm-oQ3Y1xkvEkP9mftPj0SYQeAHAOUM';
+      // result = await creatcode(null, data, mytoken);
+      // if(result.errcode=="40001"){
+      //    //token失效了，要重新通过微信获取，华哥之前的接口刷新了token，导致我们这边的token失效了。
+      // }
+    } 
   } catch (error) {
     result = error
   }
   //
   ctx.body = {
     code: 0,
-    debugInfo:wxAuthInfo,
-    data:result,
+    debugInfo: wxAuthInfo,
+    data: result,
   };
 });
 

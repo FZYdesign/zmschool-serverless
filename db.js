@@ -10,9 +10,9 @@ const sequelize = new Sequelize("nodejs_demo", MYSQL_USERNAME, MYSQL_PASSWORD, {
   port,
   dialect: "mysql" /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
   timezone: "+8:00",
-  // dialectOptions: {
-  //   useUTC: false
-  // },
+  dialectOptions: {
+    useUTC: false
+  },
 });
 
 
