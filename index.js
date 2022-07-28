@@ -432,8 +432,8 @@ let subscribeMessage = async (wxinfo, msgData) => {
         data: _data,
         // template_id: "Q3egK0TR8xnjPFokCjjQbs5nKqWaFB_DrINOPmjNd08",//消息模版ID
         template_id: msgData.tempId||"l8sv58g0tG1EVD6SfvB3GunFW3zuN28g5LduquKSxos",//消息模版ID，----收到未读消息通知
-        miniprogram_state: "developer",//跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
-        // openid: 'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
+        miniprogram_state:wxinfo.miniprogram_state||"formal",//跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
+        // openid: wxinfo.openid||'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
         // version: 2,
         // scene: 2,
         // content: '安全检测文本'
