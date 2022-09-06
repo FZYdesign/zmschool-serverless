@@ -14,7 +14,8 @@ const homePage = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
 const { isFunction, getSignature } = require('./common/utils');//
 const request = require('request');
 
-var moment = require('moment');
+const moment = require('moment');
+const momentTimezone = require("moment-timezone");
 // console.log('moment:---',moment(new Date()).format("YYYY-MM-DD"));
 // console.log('moment:---',moment(new Date()).format("YYYY-MM-DD hh:mm:ss"));
 
@@ -342,6 +343,7 @@ router.get("/api/msgcall", async (ctx) => {
 });
 
 function getCurrentTime() {
+  //方式一
   // var date = new Date();//当前时间
   // var year = date.getFullYear() //返回指定日期的年份
   // var month = repair(date.getMonth() + 1);//月
@@ -355,8 +357,10 @@ function getCurrentTime() {
   //         + " " + hour + ":" + minute + ":" + second;
 
   //方法二
-  var curTime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+  // var curTime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+  var curTime = momentTimezone().tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm:ss");
   // console.log('curTime:----',curTime);
+  // console.log('curTime:-----',momentTimezone().tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm:ss"));
   return curTime;
 }
 // getCurrentTime();
