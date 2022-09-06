@@ -355,9 +355,11 @@ function getCurrentTime() {
   //         + " " + hour + ":" + minute + ":" + second;
 
   //方法二
-  var curTime = moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
+  var curTime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+  // console.log('curTime:----',curTime);
   return curTime;
 }
+// getCurrentTime();
 
 //补0
 
