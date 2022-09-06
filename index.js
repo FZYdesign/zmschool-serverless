@@ -11,9 +11,12 @@ const router = new Router();
 const homePage = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
 
 
-const {isFunction,getSignature}=require('./common/utils');//
+const { isFunction, getSignature } = require('./common/utils');//
 const request = require('request');
 
+var moment = require('moment');
+// console.log('moment:---',moment(new Date()).format("YYYY-MM-DD"));
+// console.log('moment:---',moment(new Date()).format("YYYY-MM-DD hh:mm:ss"));
 
 router.post("/api/creatcode", async (ctx) => {
   const { request } = ctx;
@@ -75,7 +78,7 @@ let creatcode = async (wxinfo, msgData, token) => {
       if (response) {
         console.log('接口返回内容', response.body)
         // const buffer = new Buffer(response.body, 'binary');
-        let result=response.body;
+        let result = response.body;
         // let base64str = Buffer.from(response.body).toString('base64'); // base64编码
         // let base64str = Buffer.from(response.body,'binary').toString('base64'); // base64编码
         //返回来的二进制图片数据，需要转成base64,或者保存后，返回给前端
@@ -83,7 +86,7 @@ let creatcode = async (wxinfo, msgData, token) => {
         // let buffer = Buffer.from(response.body, 'utf-8');
         // let result=buffer.toString('base64');
         // if(isBuffer(result)){
-          // result=toBase64("image/jpeg",result);
+        // result=toBase64("image/jpeg",result);
         // }
         resolve(result);
         // resolve(JSON.parse(response.body));
@@ -94,11 +97,11 @@ let creatcode = async (wxinfo, msgData, token) => {
     })
   })
 };
-const isBuffer=(str)=>{
+const isBuffer = (str) => {
   return str && typeof str === "object" && Buffer.isBuffer(str)
 }
-const toBase64 = (extMimeType, buffer) =>{
-  return  'data:'+extMimeType||'image/jpeg'+';base64,'+buffer.toString('base64');
+const toBase64 = (extMimeType, buffer) => {
+  return 'data:' + extMimeType || 'image/jpeg' + ';base64,' + buffer.toString('base64');
 }
 
 let getWxaccessToken = async () => {
@@ -205,10 +208,10 @@ const getToken = async () => {
  * HUA 获取token接口
  * @returns 
  */
-let wechatAppGetToken= async () => {
+let wechatAppGetToken = async () => {
   return new Promise((resolve, reject) => {
-    let _signature=getSignature({
-      appKey:'1000620'
+    let _signature = getSignature({
+      appKey: '1000620'
     });//生成签名
     request({
       url: 'https://zm.annie2x.com/wechat/index.php/wechatAppGetToken',//云托管要使用http,如果使用https需要配置证书
@@ -251,7 +254,7 @@ router.get("/api/token", async (ctx) => {
   let wxAuthInfo = [];//数据库表数据列表token实例,数组对象
   try {
     result = await getToken();
-    if (result.accesstoken||result.access_token) {
+    if (result.accesstoken || result.access_token) {
       let data = {
         // access_token:result.accesstoken,
         page: "pages/v2/index/index",
@@ -262,13 +265,13 @@ router.get("/api/token", async (ctx) => {
         env_version: "release"
       }
 
-      result = await creatcode(null, data, result.accesstoken||result.access_token);
+      result = await creatcode(null, data, result.accesstoken || result.access_token);
       // let mytoken='57_5Pa_DHJEmdk3ne_sety_wuvfCYTTSg3rPP85r569p8Tmf3CMrTbdUgLQL6xOxPW-3U2K-vZBe0UIJbWyqFmE_yWRSc69wTAMr-S2kbayxBlTJhG46xBd-6l3NoTMm-oQ3Y1xkvEkP9mftPj0SYQeAHAOUM';
       // result = await creatcode(null, data, mytoken);
       // if(result.errcode=="40001"){
       //    //token失效了，要重新通过微信获取，华哥之前的接口刷新了token，导致我们这边的token失效了。
       // }
-    } 
+    }
   } catch (error) {
     result = error
   }
@@ -330,7 +333,7 @@ router.get("/api/msgcall", async (ctx) => {
     openid: openid
   }
   try {
-    const result = await subscribeMessage(wxinfo, tempData||{ thing1: '张三学生卡位置发生变化' });
+    const result = await subscribeMessage(wxinfo, tempData || { thing1: '张三学生卡位置发生变化' });
     // ctx.body=wxinfo;
     ctx.body = result;
   } catch (error) {
@@ -339,73 +342,76 @@ router.get("/api/msgcall", async (ctx) => {
 });
 
 function getCurrentTime() {
-  var date = new Date();//当前时间
-  var year = date.getFullYear() //返回指定日期的年份
-  var month = repair(date.getMonth() + 1);//月
-  var day = repair(date.getDate());//日
-  var hour = repair(date.getHours());//时
-  var minute = repair(date.getMinutes());//分
-  var second = repair(date.getSeconds());//秒
-  
-  //当前时间 
-  var curTime = year + "-" + month + "-" + day
-          + " " + hour + ":" + minute + ":" + second;
+  // var date = new Date();//当前时间
+  // var year = date.getFullYear() //返回指定日期的年份
+  // var month = repair(date.getMonth() + 1);//月
+  // var day = repair(date.getDate());//日
+  // var hour = repair(date.getHours());//时
+  // var minute = repair(date.getMinutes());//分
+  // var second = repair(date.getSeconds());//秒
+
+  // //当前时间 
+  // var curTime = year + "-" + month + "-" + day
+  //         + " " + hour + ":" + minute + ":" + second;
+
+  //方法二
+  var curTime = moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
   return curTime;
 }
 
 //补0
 
-function repair(i){
+function repair(i) {
   if (i >= 0 && i <= 9) {
-      return "0" + i;
+    return "0" + i;
   } else {
-      return i;
+    return i;
   }
 }
 
 let subscribeMessage = async (wxinfo, msgData) => {
   return new Promise((resolve, reject) => {
-    let _data=null;
-    if(msgData.tempId=='l8sv58g0tG1EVD6SfvB3GunFW3zuN28g5LduquKSxos'){
+    let _data = null;
+    if (msgData.tempId == 'l8sv58g0tG1EVD6SfvB3GunFW3zuN28g5LduquKSxos') {
       //收到未读消息通知
-      _data={
+      _data = {
         "short_thing1": {
           "value": msgData.short_thing1 || "系统消息"
         },
-        "thing2":{
-          "value": msgData.thing2 ||'您有新的未读消息，请点击查看'
+        "thing2": {
+          "value": msgData.thing2 || '您有新的未读消息，请点击查看'
         },
         "time3": {
           "value": getCurrentTime()
         }
       }
-    }else if(msgData.tempId=='E_UfdlSN7yi0HzeuxQzZ5CzLfz23jAHB6XDIWVIKIYc'){
+    } else if (msgData.tempId == 'E_UfdlSN7yi0HzeuxQzZ5CzLfz23jAHB6XDIWVIKIYc') {
       //到校离校提醒
-      _data={
+      _data = {
         "thing5": {
           "value": msgData.thing5 || "学校名称"
         },
-        "name2":{
-          "value": msgData.name2 ||'张三'
+        "name2": {
+          "value": msgData.name2 || '张三'
         },
-        "thing7":{
-          "value": msgData.thing7 ||'正门'
+        "thing7": {
+          "value": msgData.thing7 || '正门'
         },
         "date4": {
           "value": getCurrentTime()//2019年1月1日 20时01分01秒
         }
       }
-    }else if(msgData.tempId=='eEhNuCArAy89drlJJpOm4noDv3EimUUCMB0E_h1DMjI'){
+    } else if (msgData.tempId == 'eEhNuCArAy89drlJJpOm4noDv3EimUUCMB0E_h1DMjI') {
       //校服定位通知
-      _data={
+      _data = {
         "thing1": {
           "value": msgData.thing1 || "实验小学"
         },
-        "thing2":{
-          "value": msgData.thing2 ||'张金鹏'
+        "thing2": {
+          "value": msgData.thing2 || '张金鹏'
         },
         "thing4": {
-          "value": msgData.thing4 ||'浙江省台州市椒江区开发达到东段666号'
+          "value": msgData.thing4 || '浙江省台州市椒江区开发达到东段666号'
         }
       }
     }
@@ -427,12 +433,12 @@ let subscribeMessage = async (wxinfo, msgData) => {
       body: JSON.stringify({
         touser: wxinfo.openid || 'olCm55e965oZA_5256GAmSp5TWts',// 可以从请求的header中直接获取 req.headers['x-wx-openid']
         // page: 'index',
-        page:'pages/v2/index/index',
+        page: 'pages/v2/index/index',
         lang: 'zh_CN',
         data: _data,
         // template_id: "Q3egK0TR8xnjPFokCjjQbs5nKqWaFB_DrINOPmjNd08",//消息模版ID
-        template_id: msgData.tempId||"l8sv58g0tG1EVD6SfvB3GunFW3zuN28g5LduquKSxos",//消息模版ID，----收到未读消息通知
-        miniprogram_state:wxinfo.miniprogram_state||"formal",//跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
+        template_id: msgData.tempId || "l8sv58g0tG1EVD6SfvB3GunFW3zuN28g5LduquKSxos",//消息模版ID，----收到未读消息通知
+        miniprogram_state: wxinfo.miniprogram_state || "formal",//跳转小程序类型：developer为开发版；trial为体验版；formal为正式版；默认为正式版
         // openid: wxinfo.openid||'olCm55e965oZA_5256GAmSp5TWts', // 可以从请求的header中直接获取 req.headers['x-wx-openid']
         // version: 2,
         // scene: 2,
@@ -478,19 +484,19 @@ router.post("/api/msgcall", async (ctx) => {
   const { request } = ctx;
   const { header } = request;
   const { tempData } = request.body;
-  const {openid}=request.body;
+  const { openid } = request.body;
   const token = header['x-wx-cloudbase-access-token'];
-  const wx_openid = header['x-wx-openid']||openid;
+  const wx_openid = header['x-wx-openid'] || openid;
   const wxinfo = {
     token: token,
     openid: wx_openid
   }
   // const { action } = request.body;
   try {
-    const result = await subscribeMessage(wxinfo, tempData||{ thing1: '张三学生卡位置发生变化' });
+    const result = await subscribeMessage(wxinfo, tempData || { thing1: '张三学生卡位置发生变化' });
     // ctx.body=wxinfo;
-    if(result){
-      result.openid=wx_openid;//
+    if (result) {
+      result.openid = wx_openid;//
     }
     ctx.body = result;
   } catch (error) {
