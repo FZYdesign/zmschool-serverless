@@ -8,6 +8,8 @@ const { init: initDB, Counter, Wxauth } = require("./db");
 
 const router = new Router();
 
+const routerPlus=require("./router");//复合,融合路由
+
 const homePage = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
 
 
@@ -522,7 +524,9 @@ app
   .use(logger())
   .use(bodyParser())
   .use(router.routes())
-  .use(router.allowedMethods());
+  .use(router.allowedMethods())
+  .use(routerPlus.routes())
+  .use(routerPlus.allowedMethods());
 
 
 app.use(async (ctx, next) => {
