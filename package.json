@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "body-parser": "^1.19.1",
+    "crypto": "^1.0.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-logger": "^3.2.1",

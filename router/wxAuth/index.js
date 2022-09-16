@@ -13,7 +13,16 @@ router.post("/jscode2session", async (ctx) => {
     const { code } = request.body;
     try {
         const result = await jscode2session(code);
-        ctx.body = result;
+        let res = {};
+        if (result.openid) {
+            res = {
+                openid: result.openid
+            }
+        } else {
+            res = result
+        }
+
+        ctx.body = res;
     } catch (error) {
         ctx.body = error;
     }
@@ -35,7 +44,7 @@ let jscode2session = async (code) => {
                 grant_type: 'authorization_code',
                 appid: 'wxd2c88695f98243fa',
                 secret: 'ddc534e6c2682961ba25fccb522a3361',
-                js_code:code
+                js_code: code
             }
         }, function (error, response) {
             if (response) {
